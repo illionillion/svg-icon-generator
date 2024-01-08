@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest) => {
     const width = searchParams.get("size") ? searchParams.get("size") : 100
     const height = searchParams.get("size") ? searchParams.get("size") : 100
     const bgColor = searchParams.get("bgColor") ? searchParams.get("bgColor") : '#f0f0f0'
-
+    
     // SVGの作成
     const svg = `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -42,12 +42,23 @@ export const GET = async (request: NextRequest) => {
                     opacity: 1; /* 完全に表示されるまでフェードイン */
                 }
             }
+            .none {
+              display: none;
+            }
         </style>
         <rect x="0" y="0" width="${width}" height="${height}" fill="${bgColor}" class="fade-in" />
         <image href="${json.avatar_url}" width="${width}" height="${height}" class="fade-in" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
-            ${username}
+            ${username.split('').map(str => `<tspan class="none">${str}</tspan>`).join('')}
         </text>
+        <script>
+            const timer = setInterval(()=>{
+              if(document.getElementsByClassName('none').length === 0) {
+                clearInterval(timer)
+              } 
+              document.getElementsByClassName('none')[0].classList.remove("none")
+            }, 100)
+        </script>
     </svg>`;
 
     // SVGをレスポンスとして返す
