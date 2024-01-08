@@ -42,21 +42,21 @@ export const GET = async (request: NextRequest) => {
                     opacity: 1; /* 完全に表示されるまでフェードイン */
                 }
             }
-            .none {
-              display: none;
+            .hide {
+              visibility: hidden;
             }
         </style>
         <rect x="0" y="0" width="${width}" height="${height}" fill="${bgColor}" class="fade-in" />
         <image href="${json.avatar_url}" width="${width}" height="${height}" class="fade-in" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
-            ${username.split('').map(str => `<tspan class="none">${str}</tspan>`).join('')}
+            ${username.split('').map(str => `<tspan class="hide">${str}</tspan>`).join('')}
         </text>
         <script>
             const timer = setInterval(()=>{
-              if(document.getElementsByClassName('none').length === 0) {
+              if(document.getElementsByClassName('hide').length === 0) {
                 clearInterval(timer)
               } 
-              document.getElementsByClassName('none')[0].classList.remove("none")
+              document.getElementsByClassName('hide')[0].classList.remove("hide")
             }, 100)
         </script>
     </svg>`;
