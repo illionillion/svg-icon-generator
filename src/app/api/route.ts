@@ -21,7 +21,11 @@ export const GET = async (request: NextRequest) => {
           headers: { "Content-Type": "application/json" },
         });
     }
-
+    const icon = await fetch(json.avatar_url);
+    const buffer = await icon.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+    const imageUrl = `data:image/png;base64,${base64}`;
+    
     const width = searchParams.get("size") ? searchParams.get("size") : 100
     const height = searchParams.get("size") ? searchParams.get("size") : 100
     const bgColor = searchParams.get("bgColor") ? searchParams.get("bgColor") : '#f0f0f0'
@@ -47,7 +51,7 @@ export const GET = async (request: NextRequest) => {
             }
         </style>
         <rect x="0" y="0" width="${width}" height="${height}" fill="${bgColor}" class="fade-in" />
-        <image href="${json.avatar_url}" width="${width}" height="${height}" class="fade-in" />
+        <image href="${imageUrl}" width="${width}" height="${height}" class="fade-in" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
             ${username.split('').map(str => `<tspan class="hide">${str}</tspan>`).join('')}
         </text>
