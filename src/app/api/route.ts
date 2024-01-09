@@ -16,19 +16,21 @@ export const GET = async (request: NextRequest) => {
     const github = await fetch(`https://api.github.com/users/${username}`);
     const json: any = await github.json();
     if (!Object.keys(json).includes("avatar_url")) {
-        return new Response(JSON.stringify({ message: "400 Bad Request." }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
+      return new Response(JSON.stringify({ message: "400 Bad Request." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
     const icon = await fetch(json.avatar_url);
     const buffer = await icon.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString('base64');
+    const base64 = Buffer.from(buffer).toString("base64");
     const imageUrl = `data:image/png;base64,${base64}`;
-    
-    const size = sizeCheck(searchParams.get("size") as string)
-    const bgColor = searchParams.get("bgColor") ? searchParams.get("bgColor") : '#f0f0f0'
-    
+
+    const size = sizeCheck(searchParams.get("size") as string);
+    const bgColor = searchParams.get("bgColor")
+      ? searchParams.get("bgColor")
+      : "#f0f0f0";
+
     // SVGの作成
     const svg = `
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
@@ -50,11 +52,14 @@ export const GET = async (request: NextRequest) => {
               animation: text-animation 0.8s forwards;
               visibility: hidden;
             }
-            ${
-              username.split('').map((_, index) => `tspan:nth-child(${index + 1}) {
+            ${username
+              .split("")
+              .map(
+                (_, index) => `tspan:nth-child(${index + 1}) {
                 animation-delay: ${0.1 * (index + 1)}s
-              }`).join('')
-            }
+              }`
+              )
+              .join("")}
             @keyframes text-animation {
                 0% {
                     visibility: hidden;
@@ -71,7 +76,10 @@ export const GET = async (request: NextRequest) => {
         <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" />
         <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
-            ${username.split('').map(str => `<tspan>${str}</tspan>`).join('')}
+            ${username
+              .split("")
+              .map((str) => `<tspan>${str}</tspan>`)
+              .join("")}
         </text>
         <script>
             // const timer = setInterval(()=>{
