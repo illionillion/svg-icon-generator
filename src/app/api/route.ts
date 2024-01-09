@@ -26,13 +26,12 @@ export const GET = async (request: NextRequest) => {
     const base64 = Buffer.from(buffer).toString('base64');
     const imageUrl = `data:image/png;base64,${base64}`;
     
-    const width = searchParams.get("size") ? searchParams.get("size") : 100
-    const height = searchParams.get("size") ? searchParams.get("size") : 100
+    const size = sizeCheck(searchParams.get("size") as string)
     const bgColor = searchParams.get("bgColor") ? searchParams.get("bgColor") : '#f0f0f0'
     
     // SVGの作成
     const svg = `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
         <style>
             .fade-in {
                 opacity: 0; /* 最初は透明にする */
@@ -69,8 +68,8 @@ export const GET = async (request: NextRequest) => {
               visibility: hidden;
             }
         </style>
-        <rect x="0" y="0" width="${width}" height="${height}" fill="${bgColor}" class="fade-in" />
-        <image href="${imageUrl}" width="${width}" height="${height}" class="fade-in" />
+        <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" />
+        <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
             ${username.split('').map(str => `<tspan>${str}</tspan>`).join('')}
         </text>
@@ -95,4 +94,11 @@ export const GET = async (request: NextRequest) => {
       headers: { "Content-Type": "application/json" },
     });
   }
+};
+
+const sizeCheck = (size: string): number => {
+  if (isNaN(parseInt(size)) || parseInt(size) === 0) {
+    return 100;
+  }
+  return parseInt(size);
 };
