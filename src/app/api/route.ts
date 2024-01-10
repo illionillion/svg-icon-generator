@@ -49,8 +49,8 @@ export const GET = async (request: NextRequest) => {
             }
             tspan {
               display: inline-block;
-              animation: text-animation 0.8s forwards;
-              visibility: hidden;
+              animation: fadeInAnimation 1s forwards;
+              opacity: 0;
             }
             ${username
               .split("")
@@ -60,18 +60,6 @@ export const GET = async (request: NextRequest) => {
               }`
               )
               .join("")}
-            @keyframes text-animation {
-                0% {
-                    visibility: hidden;
-                }
-            
-                100% {
-                    visibility: visible;
-                }
-            }
-            .hide {
-              visibility: hidden;
-            }
         </style>
         <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" />
         <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" />
