@@ -69,14 +69,6 @@ export const GET = async (request: NextRequest) => {
               .map((str) => `<tspan>${str}</tspan>`)
               .join("")}
         </text>
-        <script>
-            // const timer = setInterval(()=>{
-            //   if(document.getElementsByClassName('hide').length === 0) {
-            //     clearInterval(timer)
-            //   } 
-            //   document.getElementsByClassName('hide')[0].classList.remove("hide")
-            // }, 100)
-        </script>
     </svg>`;
 
     // SVGをレスポンスとして返す
