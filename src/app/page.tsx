@@ -1,22 +1,28 @@
 "use client";
-import { Button, Center, Container, Image, Input, InputGroup, InputRightAddon } from "@yamada-ui/react"
+import { Button, Center, Container, Image, Input, InputGroup, InputLeftAddon, InputRightAddon } from "@yamada-ui/react"
 import { useRef, useState } from "react";
 
 export default function Home() {
   const usernameInputRef = useRef<HTMLInputElement>(null)
   const sizeInputRef = useRef<HTMLInputElement>(null)
   const copyInputRef = useRef<HTMLInputElement>(null)
+  const bgColorInputRef = useRef<HTMLInputElement>(null)
   const [md, setMd] = useState<string>('')
   const [iconUrl, setIconUrl] = useState<string>('')
   const handleOnClick = async () => {
-    if (!usernameInputRef.current || usernameInputRef.current.value === '' || !sizeInputRef.current) return
+    if (!usernameInputRef.current
+      || usernameInputRef.current.value === ''
+      || !sizeInputRef.current
+      || !bgColorInputRef.current
+    ) return
     const username = usernameInputRef.current.value
     const size = sizeInputRef.current.value
-    const apiURL = `api/?username=${username}${size ? `&size=${size}` : ''}` 
+    const bgColor = bgColorInputRef.current.value
+    const apiURL = `api/?username=${username}${size ? `&size=${size}` : ''}${bgColor ? `&bgColor=${encodeURIComponent(bgColor)}` : ''}` 
     const response = await fetch(`/${apiURL}`)
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob);
-    setMd(`![${username}](${window.location.href}${apiURL}`)
+    setMd(`![${username}](${window.location.href + apiURL})`)
     setIconUrl(imageUrl);
   }
   const handleCopy = () => {
@@ -39,6 +45,10 @@ export default function Home() {
         <InputGroup>
           <Input type="number" placeholder="Enter Icon Size." ref={sizeInputRef} />
           <InputRightAddon>px</InputRightAddon>
+        </InputGroup>
+        <InputGroup>
+          <InputLeftAddon>bgColor</InputLeftAddon>
+          <Input type="color" defaultValue="#f0f0f0" ref={bgColorInputRef} />
         </InputGroup>
         <Center>
           {!!iconUrl && <Image src={iconUrl} w="fit-content" h="fit-content" objectFit="contain" />}
