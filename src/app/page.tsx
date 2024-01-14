@@ -1,95 +1,46 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { Button, Center, Container, Image, Input, InputGroup } from "@yamada-ui/react"
+import { useRef, useState } from "react";
 
 export default function Home() {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const copyInputRef = useRef<HTMLInputElement>(null)
+  const [md, setMd] = useState<string>('')
+  const [iconUrl, setIconUrl] = useState<string>('')
+  const handleOnClick = async () => {
+    if (!inputRef.current) return
+    const username = inputRef.current.value
+    const response = await fetch(`/api/?username=${username}`)
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob);
+    setMd(`![${username}](${window.location.href}api/?username=${username})`)
+    setIconUrl(imageUrl);
+  }
+  const handleCopy = () => {
+    if (navigator.clipboard) {
+      return navigator.clipboard.writeText(md)
+    } else {
+      if (copyInputRef.current) {
+        copyInputRef.current.select()
+      }
+    }
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <>
+      <Container>
+        <InputGroup>
+          <Input placeholder="Enter your username." ref={inputRef} />
+          <Button onClick={handleOnClick}>Generate</Button>
+        </InputGroup>
+        <Center>
+          {!!iconUrl && <Image src={iconUrl} w="fit-content" h="fit-content" objectFit="contain" />}
+        </Center>
+        <InputGroup>
+          <Input type='text' value={md} readOnly ref={copyInputRef} />
+          <Button onClick={handleCopy} isDisabled={!iconUrl}>Copy</Button>
+        </InputGroup>
+      </Container>
+    </>
   )
 }
