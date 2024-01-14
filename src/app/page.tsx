@@ -1,19 +1,22 @@
 "use client";
-import { Button, Center, Container, Image, Input, InputGroup } from "@yamada-ui/react"
+import { Button, Center, Container, Image, Input, InputGroup, InputRightAddon } from "@yamada-ui/react"
 import { useRef, useState } from "react";
 
 export default function Home() {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const usernameInputRef = useRef<HTMLInputElement>(null)
+  const sizeInputRef = useRef<HTMLInputElement>(null)
   const copyInputRef = useRef<HTMLInputElement>(null)
   const [md, setMd] = useState<string>('')
   const [iconUrl, setIconUrl] = useState<string>('')
   const handleOnClick = async () => {
-    if (!inputRef.current) return
-    const username = inputRef.current.value
-    const response = await fetch(`/api/?username=${username}`)
+    if (!usernameInputRef.current || usernameInputRef.current.value === '' || !sizeInputRef.current) return
+    const username = usernameInputRef.current.value
+    const size = sizeInputRef.current.value
+    const apiURL = `api/?username=${username}${size ? `&size=${size}` : ''}` 
+    const response = await fetch(`/${apiURL}`)
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob);
-    setMd(`![${username}](${window.location.href}api/?username=${username})`)
+    setMd(`![${username}](${window.location.href}${apiURL}`)
     setIconUrl(imageUrl);
   }
   const handleCopy = () => {
@@ -30,8 +33,12 @@ export default function Home() {
     <>
       <Container>
         <InputGroup>
-          <Input placeholder="Enter your username." ref={inputRef} />
+          <Input type="text" placeholder="Enter your username." ref={usernameInputRef} />
           <Button onClick={handleOnClick}>Generate</Button>
+        </InputGroup>
+        <InputGroup>
+          <Input type="number" placeholder="Enter Icon Size." ref={sizeInputRef} />
+          <InputRightAddon>px</InputRightAddon>
         </InputGroup>
         <Center>
           {!!iconUrl && <Image src={iconUrl} w="fit-content" h="fit-content" objectFit="contain" />}
