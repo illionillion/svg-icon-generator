@@ -88,6 +88,11 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
+/**
+ * `size` param check
+ * @param size string
+ * @returns 
+ */
 const sizeCheck = (size: string): number => {
   if (isNaN(parseInt(size)) || parseInt(size) === 0) {
     return 100;
