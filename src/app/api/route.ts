@@ -33,6 +33,11 @@ export const GET = async (request: NextRequest) => {
     // SVGの作成
     const svg = `
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="circleClip">
+          <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" />
+        </clipPath>
+      </defs>
         <style>
             .fade-in {
                 opacity: 0; /* 最初は透明にする */
@@ -61,7 +66,7 @@ export const GET = async (request: NextRequest) => {
               .join("")}
         </style>
         <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" />
-        <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" />
+        <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" clip-path="url(#circleClip)" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
             ${username
               .split("")
