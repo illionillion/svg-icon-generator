@@ -9,10 +9,10 @@
 <img src="https://svg-icon-generator-ten.vercel.app/api?username=illionillion&size=200&bgColor=red"/>
 
 ```md
-![image](https://svg-icon-generator-ten.vercel.app/api?username=illionillionn&size=200&bgColor=red&isCircle=true)
+![image](https://svg-icon-generator-ten.vercel.app/api?username=illionillion&size=200&bgColor=red&isCircle=true)
 ```
 
-![image](https://svg-icon-generator-ten.vercel.app/api?username=illionillionn&size=200&bgColor=red&isCircle=true)
+![image](https://svg-icon-generator-ten.vercel.app/api?username=illionillion&size=200&bgColor=red&isCircle=true)
 
 # parameters
 
