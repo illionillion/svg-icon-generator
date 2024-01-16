@@ -9,6 +9,7 @@ export const GET = async (request: NextRequest) => {
     const bgColor = searchParams.get("bgColor")
       ? searchParams.get("bgColor")
       : "#f0f0f0";
+    const isCircle = booleanCheck(searchParams.get("isCircle") as string);
 
     if (!username) {
       return new Response(JSON.stringify({ message: "クエリが不正です。" }), {
@@ -65,7 +66,7 @@ export const GET = async (request: NextRequest) => {
               )
               .join("")}
         </style>
-        <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" />
+        <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" ${isCircle ? `clip-path="url(#circleClip)"` : ""} />
         <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" clip-path="url(#circleClip)" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
             ${username
@@ -98,4 +99,18 @@ const sizeCheck = (size: string): number => {
     return 100;
   }
   return parseInt(size);
+};
+
+/**
+ * Boolean check
+ * @param isBool
+ * @returns 
+ */
+const booleanCheck = (isBool: string): boolean => {
+  if (!isBool) return false;
+  if (isBool === "true") {
+    return true;
+  } else {
+    return false;
+  }
 };
