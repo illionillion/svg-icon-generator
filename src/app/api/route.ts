@@ -5,6 +5,10 @@ export const GET = async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams;
     const username = searchParams.get("username");
+    const size = sizeCheck(searchParams.get("size") as string);
+    const bgColor = searchParams.get("bgColor")
+      ? searchParams.get("bgColor")
+      : "#f0f0f0";
 
     if (!username) {
       return new Response(JSON.stringify({ message: "クエリが不正です。" }), {
@@ -25,11 +29,6 @@ export const GET = async (request: NextRequest) => {
     const buffer = await icon.arrayBuffer();
     const base64 = Buffer.from(buffer).toString("base64");
     const imageUrl = `data:image/png;base64,${base64}`;
-
-    const size = sizeCheck(searchParams.get("size") as string);
-    const bgColor = searchParams.get("bgColor")
-      ? searchParams.get("bgColor")
-      : "#f0f0f0";
 
     // SVGの作成
     const svg = `
