@@ -21,4 +21,4 @@
 | `username` | GitHub username | - |
 | `bgColor` | Background color | - |
 | `size` | Image's size | - | 
-| `isCircle` | Shape Circle | - | 
+| `isCircle` | Shape Circle | `true` or `false` | 
