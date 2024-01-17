@@ -66,7 +66,9 @@ export const GET = async (request: NextRequest) => {
               )
               .join("")}
         </style>
-        <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" ${isCircle ? `clip-path="url(#circleClip)"` : ""} />
+        <rect x="0" y="0" width="${size}" height="${size}" fill="${bgColor}" class="fade-in" ${
+      isCircle ? `clip-path="url(#circleClip)"` : ""
+    } />
         <image href="${imageUrl}" width="${size}" height="${size}" class="fade-in" clip-path="url(#circleClip)" />
         <text x="50%" y="80%" font-size="1.5rem" fill="#000" stroke="#fff" stroke-width="1" dominant-baseline="middle" text-anchor="middle" class="fade-in">
             ${username
@@ -92,7 +94,7 @@ export const GET = async (request: NextRequest) => {
 /**
  * `size` param check
  * @param size string
- * @returns 
+ * @returns
  */
 const sizeCheck = (size: string): number => {
   if (isNaN(parseInt(size)) || parseInt(size) === 0) {
@@ -104,7 +106,7 @@ const sizeCheck = (size: string): number => {
 /**
  * Boolean check
  * @param isBool
- * @returns 
+ * @returns
  */
 const booleanCheck = (isBool: string): boolean => {
   if (!isBool) return false;
